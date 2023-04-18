@@ -5,7 +5,7 @@ import pymongo
 import datetime
 
 client = pymongo.MongoClient("mongodb://localhost:27017/")  # To connect to MONGODB
-mydb = client["Twitter_Database"]    # To create a DATABASE
+mydb = client["Twitter_Database"]  # To create a DATABASE
 tweets_df = pd.DataFrame() #To create an empty dataframe
 dfm = pd.DataFrame()
 
@@ -49,20 +49,23 @@ if not tweets_df.empty:
     json_string = tweets_df.to_json(orient ='records')
     st.download_button(label="Download data as JSON",file_name="Twitter_data.json",mime="application/json",data=json_string,)
 
-    # UPLOAD DATA TO DATABASE
-    if st.button('Upload Tweets to Database'):
-        collection = mydb['scraped_data']
-        collection.insert_one({
-        'keyword': word,
-        'date': start.strftime('%Y-%m-%d'),
-        'scraped_data': tweets_list,
-        })
-        st.success('Successfully uploaded to database', icon="✅")
-        st.balloons()
-else:
-    st.warning('Cant upload because there are no tweets', icon="⚠️")
+# UPLOAD DATA TO DATABASE
+if st.button('Upload Tweets to Database'):
+ coll = word
+ coll = coll.replace(' ', '_') + '_Tweets'
+ mycoll = mydb[coll]
+ dict = tweets_df.to_dict('records')
+ if dict:
+     mycoll.insert_many(dict)
+     ts = datetime.time()
+     mycoll.update_many({}, {"$set": {"KeyWord_or_Hashtag": word + str(ts)}}, upsert=False, array_filters=None)
+     st.success('Successfully uploaded to database', icon="✅")
+     st.balloons()
+ else:
+     st.warning('Cant upload because there are no tweets', icon="⚠️")
 
-    # SHOW TWEETS
+
+# SHOW TWEETS
 if st.button('Show Tweets'):
     st.write(tweets_df)
 
@@ -78,7 +81,3 @@ with st.sidebar:
 if not dfm.empty:
     st.write( len(dfm),'Records Found')
     st.write(dfm)
-
-
-
-
