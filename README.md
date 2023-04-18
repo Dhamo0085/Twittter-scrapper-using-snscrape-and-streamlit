@@ -23,7 +23,6 @@ After scraping is done, it has the following options
 2.	Download data as JSON
 3.	Upload data to DATABASE
 4.	Display All the Tweets scraped
-5.	All the Uploaded Collections in Database are Displayed in the left side in the sidebar
 
 WORKING:
 
@@ -38,6 +37,3 @@ Now we can download this scraped data in the form of CSV or JSON format
 Step3:
 The database connection is established using pymongo
 A new collection will be created and data is uploaded into that collection  if the user wish to upload 
-
-Step4:
-A separate sidebar is created to display all the collections that are uploaded to the database, On clicking any collection, we can see the documents in that collection
