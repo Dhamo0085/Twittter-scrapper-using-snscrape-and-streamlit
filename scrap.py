@@ -4,6 +4,8 @@ import streamlit as st
 import pymongo
 import datetime
 
+client = pymongo.MongoClient("mongodb://localhost:27017/")  # To connect to MONGODB
+mydb = client["Twitter_Database"]    # To create a DATABASE
 tweets_df = pd.DataFrame() #To create an empty dataframe
 dfm = pd.DataFrame()
 
