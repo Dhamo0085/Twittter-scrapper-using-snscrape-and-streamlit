@@ -4,11 +4,10 @@ import streamlit as st
 import pymongo
 import datetime
 
-# REQUIRED VARIABLES
-client = pymongo.MongoClient("mongodb://localhost:27017/")  # To connect to MONGODB
-mydb = client["Twitter_Database"]    # To create a DATABASE
-tweets_df = pd.DataFrame()
+tweets_df = pd.DataFrame() #To create an empty dataframe
 dfm = pd.DataFrame()
+
+#MENU & OPTIONS DISPLAYED
 st.write("# Twitter data scraping")
 option = st.selectbox('How would you like the data to be searched?',('Keyword', 'Hashtag'))
 word = st.text_input('Please enter a '+option, 'Example: IPL')
@@ -17,6 +16,7 @@ end = st.date_input("Select the end date", datetime.date(2023, 1, 1),key='d2')
 tweet_c = st.slider('How many tweets to scrape', 0, 1000, 10)
 tweets_list = []
 
+#SCRAPING USING SNSCRAPE
 if word:
     if option=='Keyword':
         for i,tweet in enumerate(sntwitter.TwitterSearchScraper(f'{word} + since:{start} until:{end}').get_items()):
